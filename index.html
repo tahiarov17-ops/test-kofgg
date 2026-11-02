@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Кофейня и обжарочная «Тёмный обжар»: меню, зерно собственной обжарки и мастер-классы по субботам.">
+<title>Кофейня «Тёмный обжар»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: широкий заголовок-шкала обжарки, затем меню в две колонки, зерно по происхождению, часы и адрес */
+:root {
+  --bg: #f2f4ef;
+  --surface: #e6eae2;
+  --ink: #18211d;
+  --muted: #56625b;
+  --accent: #1f5c4a;
+  --amber: #a86a12;
+  --line: #c9d0c5;
+  --display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121815; --surface: #1b231f; --ink: #e7ece6; --muted: #9aa69f;
+    --accent: #5fb497; --amber: #e0a646; --line: #2c3731; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121815; --surface: #1b231f; --ink: #e7ece6; --muted: #9aa69f;
+  --accent: #5fb497; --amber: #e0a646; --line: #2c3731; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.6;
+}
+.wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+section .wrap { padding-block: 72px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.1; }
+h2 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 800; }
+.label {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted);
+}
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+
+/* Шапка */
+header .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 20px; flex-wrap: wrap; }
+.logo { font-family: var(--display); font-weight: 800; font-size: 18px; letter-spacing: -.01em; }
+.logo span { color: var(--accent); }
+nav { display: flex; gap: 20px; flex-wrap: wrap; }
+nav a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: 15px; }
+nav a:hover { color: var(--accent); }
+
+/* Первый экран */
+.hero .wrap { padding-block: 40px 64px; }
+.hero h1 { font-size: clamp(40px, 8.5vw, 104px); font-weight: 800; letter-spacing: -.03em; max-width: 12ch; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p { max-width: 52ch; color: var(--muted); font-size: 19px; margin: 24px 0 0; }
+.roast { margin-top: 48px; }
+.roast-bar {
+  height: 18px; border-radius: 2px;
+  background: linear-gradient(90deg, #cfb98a 0%, #b88a4a 25%, #8a5a2b 50%, #5a3519 75%, #2a170b 100%);
+  position: relative;
+}
+.roast-mark {
+  position: absolute; top: -10px; bottom: -10px; left: 72%; width: 3px; background: var(--ink);
+}
+.roast-mark::after {
+  content: "наш профиль"; position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 12px; white-space: nowrap; color: var(--ink);
+}
+.roast-scale { display: flex; justify-content: space-between; margin-top: 10px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 40px; }
+.btn {
+  display: inline-block; padding: 14px 24px; font-weight: 700; text-decoration: none;
+  border-radius: 999px; border: 2px solid var(--accent); font-size: 16px;
+}
+.btn.primary { background: var(--accent); color: var(--bg); }
+.btn.ghost { color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .roast-mark { animation: slide 1.4s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes slide { from { left: 8%; } to { left: 72%; } }
+}
+
+/* Меню */
+.menu { border-top: 1px solid var(--line); }
+.menu-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; }
+.menu-head p { margin: 0; color: var(--muted); max-width: 40ch; }
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 48px; }
+.menu-col h3 { font-size: 15px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+.item { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 14px 0; border-bottom: 1px dashed var(--line); }
+.item b { font-weight: 700; }
+.item .price { font-family: var(--mono); font-weight: 600; font-variant-numeric: tabular-nums; }
+.item small { grid-column: 1 / -1; color: var(--muted); font-size: 14px; font-family: var(--mono); }
+
+/* Зерно */
+.beans { background: var(--surface); }
+.beans h2 { margin-bottom: 8px; }
+.beans > .wrap > p { color: var(--muted); max-width: 56ch; margin: 0 0 40px; }
+.bean-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.bean { border-top: 4px solid var(--amber); padding-top: 16px; display: grid; gap: 8px; align-content: start; }
+.bean h3 { font-size: 22px; font-weight: 600; }
+.bean dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: 15px; }
+.bean dt { color: var(--muted); }
+.bean dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bean p { margin: 0; font-size: 15px; }
+
+/* Где нас найти */
+.visit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 48px; margin-top: 32px; }
+.hours { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; font-variant-numeric: tabular-nums; }
+.hours span:nth-child(even) { font-family: var(--mono); }
+.contact p { margin: 0 0 12px; }
+.copy-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.copy-row code { font-family: var(--mono); font-size: 16px; user-select: all; }
+button.copy {
+  font: 600 13px var(--body); padding: 6px 12px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--line); background: transparent; color: var(--ink);
+}
+button.copy:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Мастер-класс */
+.mk { border-top: 1px solid var(--line); }
+.mk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; align-items: start; }
+.mk-grid > * { min-width: 0; }
+.mk-info p { color: var(--muted); max-width: 48ch; }
+.mk-facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 24px 0 0; }
+.mk-facts dt { color: var(--muted); }
+.mk-facts dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.mk-card { background: var(--surface); border-radius: 12px; padding: 28px; display: grid; gap: 16px; }
+.mk-card h3 { font-size: 20px; font-weight: 600; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 600; font-size: 14px; }
+.field input, .field select {
+  font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%;
+}
+.field input:focus-visible, .field select:focus-visible { outline: 3px solid var(--amber); outline-offset: 1px; }
+.mk-card .btn { border: 2px solid var(--accent); cursor: pointer; font-family: var(--body); width: 100%; }
+.mk-card .btn:disabled { opacity: .5; cursor: default; }
+.note { font-size: 14px; color: var(--muted); margin: 0; }
+.status { font-weight: 600; margin: 0; }
+.status.ok { color: var(--accent); }
+.status.err { color: var(--amber); }
+
+footer .wrap { padding-block: 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="wrap">
+    <div class="logo">Тёмный <span>обжар</span></div>
+    <nav>
+      <a href="#menu">Меню</a>
+      <a href="#beans">Зерно</a>
+      <a href="#workshop">Мастер-класс</a>
+      <a href="#visit">Как найти</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="label">Кофейня и обжарочная · с 2019 года</span>
+      <h1>Обжариваем <em>по вторникам.</em> Варим каждый день.</h1>
+      <p>Маленькая кофейня на двенадцать мест. Зерно обжариваем сами, небольшими партиями по 5 кг, и продаём не позже трёх недель после обжарки.</p>
+      <div class="roast" aria-label="Шкала обжарки: наш профиль ближе к тёмной, но не до горечи">
+        <div class="roast-bar"><div class="roast-mark"></div></div>
+        <div class="roast-scale"><span>светлая</span><span>средняя</span><span>тёмная</span></div>
+      </div>
+      <div class="cta">
+        <a class="btn primary" href="#menu">Посмотреть меню</a>
+        <a class="btn ghost" href="#workshop">Записаться на мастер-класс</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <div class="menu-head">
+        <h2>Меню</h2>
+        <p>Молоко можно заменить на овсяное или кокосовое, +60 ₽.</p>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-col">
+          <h3>Эспрессо-бар</h3>
+          <div class="item"><b>Эспрессо</b><span class="price">180 ₽</span><small>18 г → 36 г · 28 сек</small></div>
+          <div class="item"><b>Американо</b><span class="price">210 ₽</span><small>двойной эспрессо + 150 мл воды</small></div>
+          <div class="item"><b>Капучино</b><span class="price">260 ₽</span><small>250 мл</small></div>
+          <div class="item"><b>Флэт уайт</b><span class="price">280 ₽</span><small>двойной ристретто · 180 мл</small></div>
+          <div class="item"><b>Раф с солёной карамелью</b><span class="price">340 ₽</span><small>350 мл · карамель варим сами</small></div>
+        </div>
+        <div class="menu-col">
+          <h3>Альтернатива и еда</h3>
+          <div class="item"><b>Воронка V60</b><span class="price">290 ₽</span><small>15 г на 250 мл · 1:16 · 93 °C</small></div>
+          <div class="item"><b>Аэропресс</b><span class="price">270 ₽</span><small>перевёрнутый способ · 2 мин</small></div>
+          <div class="item"><b>Колд брю</b><span class="price">260 ₽</span><small>настаиваем 16 часов</small></div>
+          <div class="item"><b>Сырники со сметаной</b><span class="price">320 ₽</span><small>до 13:00</small></div>
+          <div class="item"><b>Круассан с миндалём</b><span class="price">230 ₽</span><small>пекарня через дорогу, утренняя партия</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="beans" id="beans">
+    <div class="wrap">
+      <span class="label">В обжарке на этой неделе</span>
+      <h2>Зерно</h2>
+      <p>Пачка 250 г — 890 ₽. Смолоть можно сразу, под вашу турку, гейзер или воронку.</p>
+      <div class="bean-list">
+        <article class="bean">
+          <h3>Эфиопия, Иргачеффе</h3>
+          <dl><dt>Высота</dt><dd>1 900–2 100 м</dd><dt>Обработка</dt><dd>мытая</dd><dt>Обжарка</dt><dd>светлая</dd></dl>
+          <p>Чёрный чай, бергамот, лимонная цедра. Лучше всего в воронке.</p>
+        </article>
+        <article class="bean">
+          <h3>Колумбия, Уила</h3>
+          <dl><dt>Высота</dt><dd>1 600–1 800 м</dd><dt>Обработка</dt><dd>мытая</dd><dt>Обжарка</dt><dd>средняя</dd></dl>
+          <p>Красное яблоко, карамель, мягкая кислотность. Подходит для всего.</p>
+        </article>
+        <article class="bean">
+          <h3>Бразилия, Серрадо</h3>
+          <dl><dt>Высота</dt><dd>1 000–1 200 м</dd><dt>Обработка</dt><dd>натуральная</dd><dt>Обжарка</dt><dd>тёмная</dd></dl>
+          <p>Какао, жареный фундук. Наша основа для эспрессо и капучино.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="mk" id="workshop">
+    <div class="wrap">
+      <div class="mk-grid">
+        <div class="mk-info">
+          <span class="label">Мастер-класс по субботам</span>
+          <h2 style="margin-top:8px">Варим кофе дома, как в кофейне</h2>
+          <p>За два часа разберёмся, как помол, вода и пропорция меняют вкус. Сварим один и тот же Колумбию в воронке, аэропрессе и турке и сравним. Пачку зерна 250 г забираете с собой.</p>
+          <dl class="mk-facts">
+            <dt>Длительность</dt><dd>2 часа</dd>
+            <dt>Группа</dt><dd>до 6 человек</dd>
+            <dt>Стоимость</dt><dd>2 400 ₽, оплата на месте</dd>
+            <dt>Начало</dt><dd>11:00</dd>
+          </dl>
+        </div>
+
+        <form class="mk-card" id="signup-form" novalidate>
+          <h3>Записаться</h3>
+          <div class="field">
+            <label for="f-date">Дата</label>
+            <select id="f-date" required>
+              <option value="2026-11-07">Суббота, 7 ноября</option>
+              <option value="2026-11-14">Суббота, 14 ноября</option>
+              <option value="2026-11-21">Суббота, 21 ноября</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-name">Имя</label>
+            <input id="f-name" type="text" autocomplete="name" placeholder="Как к вам обращаться" required>
+          </div>
+          <div class="field">
+            <label for="f-contact">Телефон или Telegram</label>
+            <input id="f-contact" type="text" placeholder="+7 900 … или @username" required>
+          </div>
+          <div class="field">
+            <label for="f-seats">Сколько человек</label>
+            <select id="f-seats">
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+          <button class="btn primary" id="f-submit" type="submit">Записаться на мастер-класс</button>
+          <p class="status" id="f-status" role="status"></p>
+          <p class="note" id="f-note">Мы напишем вам за день до мастер-класса, чтобы подтвердить.</p>
+          <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="visit">
+    <div class="wrap">
+      <h2>Как нас найти</h2>
+      <div class="visit-grid">
+        <div>
+          <span class="label">Часы работы</span>
+          <div class="hours" style="margin-top:12px">
+            <span>Пн–Пт</span><span>08:00–21:00</span>
+            <span>Сб–Вс</span><span>09:00–22:00</span>
+            <span>Вторник</span><span>обжарка с 07:00, пахнет на весь квартал</span>
+          </div>
+        </div>
+        <div class="contact">
+          <span class="label">Адрес и связь</span>
+          <p style="margin-top:12px">ул. Садовая, 14, вход со двора.<br>5 минут пешком от метро.</p>
+          <div class="copy-row">
+            <code id="phone">+7 900 123-45-67</code>
+            <button class="copy" id="copy-phone" type="button">Скопировать</button>
+          </div>
+          <p style="margin-top:12px">Пишите в Telegram: <code style="font-family:var(--mono)">@timershek</code></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Кофейня «Тёмный обжар»</span>
+    <span>ул. Садовая, 14 · @timershek</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('copy-phone').addEventListener('click', function () {
+  var btn = this, text = document.getElementById('phone').textContent;
+  function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = 'Скопировать'; }, 1800); }
+  try {
+    navigator.clipboard.writeText(text).then(function () { done('Скопировано'); }, function () { select(); });
+  } catch (e) { select(); }
+  function select() {
+    var r = document.createRange(); r.selectNodeContents(document.getElementById('phone'));
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); done('Выделено, нажмите Ctrl+C');
+  }
+});
+
+/* Запись на мастер-класс.
+   Заявка уходит в Google Apps Script (папка apps-script), он пишет её
+   в Google Таблицу и присылает сообщение в Telegram.
+   После публикации скрипта вставьте сюда его адрес (заканчивается на /exec). */
+var FORM_ENDPOINT = 'ВСТАВЬТЕ_АДРЕС_APPS_SCRIPT';
+
+(function () {
+  var form = document.getElementById('signup-form');
+  var submit = document.getElementById('f-submit');
+  var status = document.getElementById('f-status');
+  var DATES = { '2026-11-07': '7 ноября', '2026-11-14': '14 ноября', '2026-11-21': '21 ноября' };
+
+  function setStatus(text, kind) { status.textContent = text; status.className = 'status ' + (kind || ''); }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var name = document.getElementById('f-name').value.trim();
+    var contact = document.getElementById('f-contact').value.trim();
+    var date = document.getElementById('f-date').value;
+    var seats = Number(document.getElementById('f-seats').value);
+    if (!name) { setStatus('Укажите имя.', 'err'); document.getElementById('f-name').focus(); return; }
+    if (!contact) { setStatus('Укажите телефон или Telegram, чтобы мы могли подтвердить запись.', 'err'); document.getElementById('f-contact').focus(); return; }
+    if (FORM_ENDPOINT.indexOf('https://') !== 0) {
+      setStatus('Запись пока не подключена. Напишите нам в Telegram @timershek.', 'err'); return;
+    }
+    submit.disabled = true;
+    setStatus('Отправляем…');
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        name: name, contact: contact, date: date, seats: seats,
+        website: document.getElementById('f-website').value
+      })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.error || 'error');
+        setStatus('Готово! Вы записаны на ' + DATES[date] + ', начало в 11:00. Мы напишем вам для подтверждения.', 'ok');
+        form.reset();
+      })
+      .catch(function () {
+        setStatus('Не получилось отправить заявку. Попробуйте ещё раз или напишите в Telegram @timershek.', 'err');
+      })
+      .then(function () { submit.disabled = false; });
+  });
+})();
+</script>
+
+</body>
+</html>
